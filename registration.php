@@ -75,7 +75,7 @@ if(isset($_GET['join_user'])){
 		$hash = password_hash($password, PASSWORD_DEFAULT);
 
 		//Insert into User profile
-		$query = mysqli_query($con,"insert into users(`email`,`password`,`firstname`,`surname`,`mobile`,`address`,`account`,`under_userid`,`side`) values('$email','$hash','$firstname','$surname','$mobile','$address','$account','$under_userid','')");
+		$query = mysqli_query($con,"insert into users (`email`,`password`,`firstname`,`surname`,`mobile`,`address`,`account`,`under_userid`) values('$email','$hash','$firstname','$surname','$mobile','$address','$account','$under_userid')");
 
 		//Insert into Tree
 		//So that later on we can view tree.
