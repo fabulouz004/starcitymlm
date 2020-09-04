@@ -61,7 +61,7 @@ $userid = $_SESSION['userid'];
                             </tr>
                             <?php 
 							$i=1;
-							$query = mysqli_query($con,"select * from income_received where userid='$userid' order by id desc");
+							$query = mysqli_query($con,"select * from bonus_received where userid='$userid' order by id desc");
 							if(mysqli_num_rows($query)>0){
 								while($row=mysqli_fetch_array($query)){
 									$amount = $row['amount'];
