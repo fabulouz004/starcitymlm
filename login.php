@@ -1,6 +1,4 @@
-
 <?php
-
 session_start();
 require('php-includes/connect.php');
 $email = mysqli_real_escape_string($con,$_POST['email']);
