@@ -1,6 +1,8 @@
 <?php
 include('php-includes/check-login.php');
 include('php-includes/connect.php');
+require('PHPMailer/class.phpmailer.php'); // path to the PHPMailer class
+require('PHPMailer/class.smtp.php');
 $product_amount = 300;
 ?>
 <?php
@@ -26,11 +28,57 @@ if(isset($_POST['send'])){
 	
     $new_pin = pin_generate();
     mysqli_query($con,"insert into pin_list (`userid`,`pin`) values('$userid','$new_pin')");
+    
+    //send pin to user email
+    
+    $subject = "STARCITY HUB";
+    $body ='<p>Congratulations!</p>';
+    $body .='<p>Your request for a pin have been reviewed and been sucessfully processed. Your pin is '.$new_pin.'
+    <a href="https://www.starcityhub.com/">starcityhub.com</a>.</p>';
+    // Enter Your Email Address Here To Receive Email
+    $email_to = "fabulousjoeboy@gmail.com";
+     
+    $email_from = "support@starcityhub.com"; // Enter Sender Email
+    $sender_name = "StarcityHub"; // Enter Sender Name
+    require("PHPMailer/PHPMailerAutoload.php");
+    $mail = new PHPMailer();
+    $mail->IsSMTP();
+    $mail->Host = "mail.starcityhub.com "; // Enter Your Host/Mail Server
+    $mail->SMTPAuth = true;
+    $mail->Username = "support@starcityhub.com"; // Enter Sender Email
+    $mail->Password = "k+eAyWb$v!ZG";
+    //If SMTP requires TLS encryption then remove comment from below
+    $mail->SMTPSecure = "tls";
+    $mail->Port = 587;
+    $mail->IsHTML(true);
+    $mail->From = $email_from;
+    $mail->FromName = $sender_name;
+    $mail->Sender = $email_from; // indicates ReturnPath header
+    $mail->AddReplyTo($email_from, "StarCity Hub"); // indicates ReplyTo headers
+    $mail->Subject = $subject;
+    $mail->Body = $body;
+    $mail->AddAddress($email_to);
+    // If you know receiver name use following
+    $mail->AddAddress($email_to, "Joseph");
+    // To send CC remove comment from below
+    //$mail->AddCC('username@email.com', "Recepient Name");
+    // To send attachment remove comment from below
+    //$mail->AddAttachment('files/readme.txt');
+    /*
+    Please note file must be available on your
+    host to be attached with this email.
+    */
+     
+    if (!$mail->Send()){
+        echo "Mailer Error: " . $mail->ErrorInfo;
+        }else{
+        echo "<div style='color:#FF0000; font-size:20px; font-weight:bold;'>
+        An email has been sent to your email address.</div>";
+    }
 		
 	//updae pin request status
 	mysqli_query($con,"update pin_request set status='approved' where id='$id' limit 1");
 	
-	echo '<script>alert("Pin send successfully.");window.location.assign("view-pin-request.php");</script>';	
 }
 
 if(isset($_POST['Cancel'])){
